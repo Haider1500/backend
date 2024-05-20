@@ -1,10 +1,5 @@
 const joi = require("joi");
-
-let users = [
-  { username: "Ali", age: "12", password: "asfsfwoif", id: 12345 },
-  { username: "sajjad", age: "21", password: "dfklewe12", id: 12346 },
-  { username: "Ammar", age: "18", password: "fsdfkle", id: 12347 },
-];
+const { createUser } = require("../services/userService");
 
 const createUserSchema = joi.object().keys({
   username: joi.string().required(),
@@ -31,13 +26,10 @@ module.exports = {
   },
   createUser: async (req, res) => {
     try {
-      console.log(req.body);
       const validate = await createUserSchema.validateAsync(req.body);
-      users = [...users, validate];
-      console.log(req.body);
+      const users = createUser(validate);
       res.send({
-        message: "Created a new user!",
-        data: users,
+        response: users,
       });
     } catch (error) {
       res.send({

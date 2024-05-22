@@ -3,31 +3,24 @@ const { createUser } = require("../services/userService");
 
 const createUserSchema = joi.object().keys({
   username: joi.string().required(),
-  age: joi.string().required(),
   password: joi.string().min(3).max(20).required(),
-  id: joi.string().min(3).required(),
+  confirmPassword: joi.ref("password"),
 });
-const updateUserSchema = joi.object().keys({
-  username: joi.string(),
-  age: joi.string(),
-  password: joi.string().min(3).max(20),
-  id: joi.required(),
-});
-const deleteUserSchema = joi.object().keys({
-  id: joi.required(),
-});
+// const updateUserSchema = joi.object().keys({
+//   username: joi.string(),
+//   age: joi.string(),
+//   password: joi.string().min(3).max(20),
+//   id: joi.required(),
+// });
+// const deleteUserSchema = joi.object().keys({
+//   id: joi.required(),
+// });
 
 module.exports = {
-  getUsers: (req, res) => {
-    res.send({
-      message: "success",
-      data: users,
-    });
-  },
   createUser: async (req, res) => {
     try {
       const validate = await createUserSchema.validateAsync(req.body);
-      const users = createUser(validate);
+      const users = await createUser(validate);
       res.send({
         response: users,
       });
@@ -37,6 +30,14 @@ module.exports = {
       });
     }
   },
+
+  getUsers: (req, res) => {
+    res.send({
+      message: "success",
+      data: users,
+    });
+  },
+
   updateUser: async (req, res) => {
     try {
       const validate = await updateUserSchema.validateAsync(req.body);

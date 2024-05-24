@@ -1,8 +1,9 @@
 const joi = require("joi");
 const { createUser } = require("../services/userService");
+const userService = require("../services/userService");
 
 const createUserSchema = joi.object().keys({
-  username: joi.string().required(),
+  userName: joi.string().required(),
   password: joi.string().min(3).max(20).required(),
   confirmPassword: joi.ref("password"),
 });
@@ -12,9 +13,14 @@ const createUserSchema = joi.object().keys({
 //   password: joi.string().min(3).max(20),
 //   id: joi.required(),
 // });
-// const deleteUserSchema = joi.object().keys({
-//   id: joi.required(),
-// });
+const deleteUserSchema = joi.object().keys({
+  userId: joi.string().required(),
+});
+
+const updateUserSchema = joi.object().keys({
+  userId: joi.string().required(),
+  userName: joi.string(),
+});
 
 module.exports = {
   createUser: async (req, res) => {
@@ -22,7 +28,7 @@ module.exports = {
       const validate = await createUserSchema.validateAsync(req.body);
       const users = await createUser(validate);
       res.send({
-        response: users,
+        response: users.response,
       });
     } catch (error) {
       res.send({
@@ -31,7 +37,7 @@ module.exports = {
     }
   },
 
-  getUsers: (req, res) => {
+  getUser: (req, res) => {
     res.send({
       message: "success",
       data: users,
@@ -42,16 +48,9 @@ module.exports = {
     try {
       const validate = await updateUserSchema.validateAsync(req.body);
       //updating the array of users
-      console.log(validate, "validate");
-      users = users.map((u) => {
-        if (validate.id === u.id) {
-          return { ...u, ...validate };
-        }
-        return u;
-      });
+      const updatedUser = await userService.updateUser(validate);
       res.send({
-        message: "successfully updated",
-        data: users,
+        response: updatedUser,
       });
     } catch (error) {
       res.send({ message: error.message });
@@ -60,10 +59,29 @@ module.exports = {
   deleteUser: async (req, res) => {
     try {
       const validate = await deleteUserSchema.validateAsync(req.query);
-      users = users.filter((u) => u.id.toString() !== validate.id);
-      res.send({
-        message: `Delete this id: ${req.query.id}`,
-        data: users,
+      const deleteUser = await userService.deleteUser(validate.userId);
+      if (deleteUser.error) {
+        return res.send({
+          error: error,
+        });
+      }
+      return res.send({
+        response: deleteUser.response,
+      });
+    } catch (error) {
+      res.send({ message: error.message });
+    }
+  },
+  getAllUser: async (req, res) => {
+    try {
+      const users = await userService.getAllUser();
+      if (users.error) {
+        return res.send({
+          error: error,
+        });
+      }
+      return res.send({
+        users: users.response,
       });
     } catch (error) {
       res.send({ message: error.message });

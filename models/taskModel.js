@@ -3,8 +3,6 @@ const { models } = require("./index");
 module.exports = {
   getTask: async (taskId, taskName) => {
     try {
-      console.log(taskId, "=========taskId");
-      console.log(taskName, "=========taskname");
       const task = await models.tasks.findOne({
         ...(taskId
           ? { where: { taskId: taskId } }
@@ -31,9 +29,31 @@ module.exports = {
   getAllTask: async () => {
     try {
       const tasks = await models.tasks.findAll();
-      console.log(tasks, "===========tasks inside the model");
       return {
         response: tasks,
+      };
+    } catch (error) {
+      return { error: error };
+    }
+  },
+  deleteTask: async (taskId) => {
+    try {
+      const tasks = await models.tasks.destroy({ where: { taskId: taskId } });
+      return {
+        response: tasks,
+      };
+    } catch (error) {
+      return { error: error };
+    }
+  },
+  updateTask: async ({ taskId, ...body }) => {
+    try {
+      const task = await models.tasks.update(
+        { ...body },
+        { where: { taskId: taskId } }
+      );
+      return {
+        response: task,
       };
     } catch (error) {
       return { error: error };

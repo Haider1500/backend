@@ -45,4 +45,32 @@ module.exports = {
       return { error: error };
     }
   },
+  deleteTask: async (taskId) => {
+    try {
+      const tasks = await taskModel.deleteTask(taskId);
+      if (tasks.error || !tasks.response) {
+        return {
+          error: tasks.error || "No task exists with this taskId!",
+        };
+      }
+
+      return { response: tasks.response };
+    } catch (error) {
+      return { error: error };
+    }
+  },
+  updateTask: async (body) => {
+    try {
+      const tasks = await taskModel.updateTask({ ...body });
+      if (tasks.error || !tasks.response[0]) {
+        return {
+          error: tasks.error || "Provide the fields to update!",
+        };
+      }
+
+      return { response: tasks.response };
+    } catch (error) {
+      return { error: error };
+    }
+  },
 };

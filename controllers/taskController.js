@@ -4,9 +4,17 @@ const taskService = require("../services/taskService");
 const getTaskSchema = joi.object().keys({
   taskId: joi.string().required(),
 });
+const deleteTaskSchema = joi.object().keys({
+  taskId: joi.string().required(),
+});
 const createTaskSchema = joi.object().keys({
   name: joi.string().min(4).max(50).required(),
   description: joi.string().min(4).max(255).required(),
+});
+const updateTaskSchema = joi.object().keys({
+  taskId: joi.string().required(),
+  name: joi.string().min(4).max(50),
+  description: joi.string().min(4).max(255),
 });
 
 module.exports = {
@@ -43,6 +51,31 @@ module.exports = {
         return res.send({ error: tasks.error });
       }
       return res.send({ response: tasks.response });
+    } catch (error) {
+      return res.send({ error: error.message });
+    }
+  },
+  deleteTask: async (req, res) => {
+    try {
+      const validate = await deleteTaskSchema.validateAsync(req.query);
+      const task = await taskService.deleteTask(validate.taskId);
+      if (task.error) {
+        return res.send({ error: task.error });
+      }
+      return res.send({ response: task.response });
+    } catch (error) {
+      return res.send({ error: error.message });
+    }
+  },
+  updateTask: async (req, res) => {
+    try {
+      const validate = await updateTaskSchema.validateAsync(req.body);
+      const task = await taskService.updateTask(validate);
+      console.log(task, "==========task");
+      if (task.error) {
+        return res.send({ error: task.error });
+      }
+      return res.send({ response: task.response });
     } catch (error) {
       return res.send({ error: error.message });
     }

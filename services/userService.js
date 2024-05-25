@@ -23,7 +23,7 @@ module.exports = {
           error: error.message,
         };
       }
-      // delete user.response.password;
+      delete user.response.password;
       return {
         response: user.response,
       };

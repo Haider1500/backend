@@ -1,8 +1,8 @@
-const { login: loginCon, logout } = require("../controllers/authController");
+const { login, logout } = require("../controllers/authController");
 
 const router = require("express").Router();
 
-router.get("/login", loginCon);
+router.get("/login", login);
 router.get("/logout", logout);
 
 module.exports = router;

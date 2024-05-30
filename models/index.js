@@ -16,7 +16,3 @@ sessions.belongsTo(users, { foreignKey: "userId" });
 sequelize.models = models;
 
 module.exports = { db, models };
-
-// createSession
-// getSpecficSession
-// deleteSession

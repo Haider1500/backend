@@ -3,7 +3,6 @@ var express = require("express");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var userRouter = require("./routes/userRouter");
-var adminRouter = require("./routes/adminRouter");
 var authRouter = require("./routes/authRouter");
 var taskRouter = require("./routes/taskRouter");
 var sessionRouter = require("./routes/sessionRouter");
@@ -19,7 +18,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use("/user", userRouter);
-app.use("/admin", adminRouter);
 app.use("/auth", authRouter);
 app.use("/task", taskRouter);
 app.use("/session", sessionRouter);

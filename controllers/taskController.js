@@ -10,6 +10,7 @@ const deleteTaskSchema = joi.object().keys({
 const createTaskSchema = joi.object().keys({
   name: joi.string().min(4).max(50).required(),
   description: joi.string().min(4).max(255).required(),
+  userId: joi.string().required(),
 });
 const updateTaskSchema = joi.object().keys({
   taskId: joi.string().required(),

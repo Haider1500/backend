@@ -5,11 +5,11 @@ const userModel = require("../models/userModel");
 module.exports = {
   createUser: async (body) => {
     try {
-      // delete body.confirmPassword;
+      delete body.confirmPassword;
       body.password = await hash(body.password, 10);
       body.userId = uuid();
 
-      const isUser = await userModel.getUser("", body.userName);
+      const isUser = await userModel.getUser(false, body.userName);
       console.log(isUser, "isUser");
       if (isUser.error || isUser.response) {
         return {

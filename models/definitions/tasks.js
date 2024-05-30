@@ -18,6 +18,14 @@ tasks.init(
       allowNull: false,
       type: DataTypes.STRING(100),
     },
+    // userId: {
+    //   // unique: true,
+    //   allowNull: false,
+    //   references: {
+    //     model: users,
+    //     key: "userId",
+    //   },
+    // },
   },
   { timestamps: true, paranoid: true, tableName: "tasks", sequelize }
 );

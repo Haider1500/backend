@@ -6,6 +6,7 @@ var userRouter = require("./routes/userRouter");
 var adminRouter = require("./routes/adminRouter");
 var authRouter = require("./routes/authRouter");
 var taskRouter = require("./routes/taskRouter");
+var sessionRouter = require("./routes/sessionRouter");
 
 var app = express();
 
@@ -21,6 +22,7 @@ app.use("/user", userRouter);
 app.use("/admin", adminRouter);
 app.use("/auth", authRouter);
 app.use("/task", taskRouter);
+app.use("/session", sessionRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

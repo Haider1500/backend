@@ -17,14 +17,14 @@ module.exports = {
     try {
       const user = await models.users.findOne({
         ...(userId
-          ? { where: { userName: userName } }
-          : { where: { userId: userId } }),
+          ? { where: { userId: userId } }
+          : { where: { userName: userName } }),
       });
       return {
         response: user,
       };
     } catch (error) {
-      return { error: error };
+      return { error: error?.message || error };
     }
   },
   getAllUser: async () => {
